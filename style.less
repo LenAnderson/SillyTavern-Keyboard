@@ -1,0 +1,64 @@
+.popup:has(.stkc--settings) {
+    width: 90vw;
+}
+.stkc--settings {
+    .stkc--item {
+        display: flex;
+        align-items: baseline;
+        gap: 1em;
+    }
+
+    .stkc--combo {
+        flex: 0 0 auto;
+        align-self: stretch;
+
+        display: flex;
+        gap: 0.5em;
+        justify-content: center;
+
+        cursor: pointer;
+        height: auto;
+        padding: 6px 4px;
+        width: 20em;
+
+        &.stkc--isEditing {
+            background-color: var(--SmartThemeQuoteColor);
+        }
+
+        .stkc--key {
+            display: flex;
+            gap: 0.5em;
+        }
+    }
+
+    .stkc--action {
+        flex: 0 0 auto;
+        width: auto;
+    }
+
+    .stkc--script, .stkc--callback, .stkc--spacer {
+        flex: 1 1 auto;
+        display: none;
+    }
+
+    .stkc--action:has([value="script"]:checked) + .stkc--script {
+        display: flex;
+        gap: 0.5em;
+        align-items: baseline;
+
+        .stkc--label {
+            flex: 1 1 auto;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+
+    .stkc--action:has([value="callback"]:checked) ~ .stkc--callback {
+        display: block;
+    }
+
+    .stkc--action:not(:has([value="script"]:checked, [value="callback"]:checked)) ~ .stkc--spacer {
+        display: block;
+    }
+}
