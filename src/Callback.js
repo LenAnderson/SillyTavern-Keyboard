@@ -7,7 +7,7 @@ export class Callback {
      * @param {object} props
      * @param {string} props.id
      * @param {string} props.label
-     * @param {(evt:KeyboardEvent)=>Promise<boolean>} [props.check]
+     * @param {(evt:KeyboardEvent)=>boolean} [props.check]
      * @param {(evt:KeyboardEvent)=>Promise} props.callback
      */
     static add(props) {

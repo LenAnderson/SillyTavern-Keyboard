@@ -101,6 +101,11 @@ export class KeyCombo {
             const root = document.createElement('div'); {
                 this.dom.root = root;
                 root.classList.add('stkc--item');
+                const dragHandle = document.createElement('div'); {
+                    dragHandle.classList.add('stkc--dragHandle');
+                    dragHandle.textContent = '≡';
+                    root.append(dragHandle);
+                }
                 const keys = document.createElement('div'); {
                     this.dom.keys = keys;
                     keys.classList.add('stkc--combo');
@@ -377,14 +382,20 @@ export class KeyCombo {
                 return true;
             }
             case COMBO_ACTION.CALLBACK: {
-                const check = await this.callback?.check(evt);
+                const check = this.callback?.check(evt);
                 if (!check) return false;
+                evt.preventDefault();
+                evt.stopImmediatePropagation();
+                evt.stopPropagation();
                 await this.callback?.callback(evt);
                 return true;
             }
             case COMBO_ACTION.SCRIPT: {
                 const msg = quickReplyApi.getQrByLabel(this.scriptSet, this.scriptQr)?.message;
                 if (msg) {
+                    evt.preventDefault();
+                    evt.stopImmediatePropagation();
+                    evt.stopPropagation();
                     const parser = new SlashCommandParser();
                     const scope = new SlashCommandScope();
                     scope.letVariable('stop', 'false');

@@ -4,6 +4,7 @@ import { LoadLocalBool, SaveLocal } from '../../../f-localStorage.js';
 import { Popup, POPUP_TYPE } from '../../../popup.js';
 import { SlashCommand } from '../../../slash-commands/SlashCommand.js';
 import { SlashCommandParser } from '../../../slash-commands/SlashCommandParser.js';
+import { getSortableDelay } from '../../../utils.js';
 import { Callback } from './src/Callback.js';
 import { KeyCombo } from './src/KeyCombo.js';
 
@@ -59,7 +60,7 @@ const handleKeyup = async(evt)=>{
 const init = async()=>{
     Callback.add({ id: 'send',
         label: 'Send chat message',
-        check: async()=>document.activeElement.id == 'send_textarea',
+        check: ()=>document.activeElement.id == 'send_textarea',
         callback: async(evt)=>{
             evt.preventDefault();
             sendTextareaMessage();
@@ -67,7 +68,7 @@ const init = async()=>{
     });
     Callback.add({ id: 'context_line',
         label: 'Scroll to context line',
-        check: async()=>true,
+        check: ()=>true,
         callback: async(evt)=>{
             evt.preventDefault();
             const line = document.querySelector('.lastInContext');
@@ -80,7 +81,7 @@ const init = async()=>{
     });
     Callback.add({ id: 'scroll_bottom',
         label: 'Scroll to bottom of chat',
-        check: async()=>true,
+        check: ()=>true,
         callback: async(evt)=>{
             const chat = document.querySelector('#chat');
             chat.scrollTo({
@@ -91,14 +92,14 @@ const init = async()=>{
     });
     Callback.add({ id: 'continue',
         label: 'Continue',
-        check: async()=>true,
+        check: ()=>true,
         callback: async(evt)=>{
             /**@type {HTMLElement}*/(document.querySelector('#option_continue')).click();
         },
     });
     Callback.add({ id: 'regenerate',
         label: 'Regenerate last response',
-        check: async()=>!document.querySelector('#curEditTextarea') && !is_send_press,
+        check: ()=>!document.querySelector('#curEditTextarea') && !is_send_press,
         callback: async(evt)=>{
             const skipConfirmKey = 'RegenerateWithCtrlEnter';
             const skipConfirm = LoadLocalBool(skipConfirmKey);
@@ -123,6 +124,13 @@ const init = async()=>{
             }
         },
     });
+    Callback.add(({ id: 'accept_edit',
+        label: 'Accept message edit',
+        check: ()=>document.activeElement.id == 'curEditTextarea',
+        callback: async(evt)=>{
+            document.activeElement.closest('.mes_block').querySelector('.mes_edit_done').click();
+        },
+    }));
 
     document.body.addEventListener('keydown', async(evt)=>handleShortcut(evt));
     document.body.addEventListener('keyup', async(evt)=>handleKeyup(evt));
@@ -137,6 +145,15 @@ const init = async()=>{
                 }
                 const list = document.createElement('div'); {
                     list.classList.add('stkc--list');
+                    $(list).sortable({
+                        handle: '.stkc--dragHandle',
+                        delay: getSortableDelay(),
+                        stop: ()=>{
+                            const items = [...list.children];
+                            KeyCombo.list.sort((a, b)=>items.indexOf(a.dom.root) - items.indexOf(b.dom.root));
+                            saveSettings();
+                        },
+                    });
                     for (const combo of KeyCombo.list) {
                         list.append(combo.render());
                     }

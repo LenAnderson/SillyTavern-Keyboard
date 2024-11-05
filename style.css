@@ -6,6 +6,9 @@
   align-items: baseline;
   gap: 1em;
 }
+.stkc--settings .stkc--dragHandle {
+  cursor: grab;
+}
 .stkc--settings .stkc--combo {
   flex: 0 0 auto;
   align-self: stretch;
@@ -39,11 +42,8 @@
   gap: 0.5em;
   align-items: baseline;
 }
-.stkc--settings .stkc--action:has([value="script"]:checked) + .stkc--script .stkc--label {
+.stkc--settings .stkc--action:has([value="script"]:checked) + .stkc--script select {
   flex: 1 1 auto;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 .stkc--settings .stkc--action:has([value="callback"]:checked) ~ .stkc--callback {
   display: block;
