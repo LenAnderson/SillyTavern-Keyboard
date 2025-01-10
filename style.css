@@ -5,6 +5,10 @@
   display: flex;
   align-items: baseline;
   gap: 1em;
+  transition: 200ms;
+}
+.stkc--settings .stkc--item:hover {
+  background-color: rgb(from var(--SmartThemeQuoteColor) r g b / 0.25);
 }
 .stkc--settings .stkc--dragHandle {
   cursor: grab;
