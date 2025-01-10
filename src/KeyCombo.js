@@ -110,6 +110,7 @@ export class KeyCombo {
                     this.dom.keys = keys;
                     keys.classList.add('stkc--combo');
                     keys.classList.add('text_pole');
+                    keys.title = 'Click to change keyboard shortcut';
                     this.renderKeys();
                     let isEditing = false;
                     keys.addEventListener('click', ()=>{
