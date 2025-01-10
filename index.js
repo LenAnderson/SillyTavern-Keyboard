@@ -182,6 +182,7 @@ const init = async()=>{
             }
             const dlg = new Popup(dom, POPUP_TYPE.TEXT, null, {
                 wider: true,
+                allowVerticalScrolling: true,
             });
             await dlg.show();
             return '';
