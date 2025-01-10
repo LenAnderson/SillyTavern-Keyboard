@@ -14,7 +14,7 @@ export class Callback {
         const instance = new this();
         instance.id = props.id;
         instance.label = props.label;
-        instance.check = props.check ?? (async()=>true);
+        instance.check = props.check ?? (()=>true);
         instance.callback = props.callback;
         this.index[instance.id] = instance;
     }
