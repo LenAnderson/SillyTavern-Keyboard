@@ -143,6 +143,10 @@ const init = async()=>{
                     h3.textContent = 'Keyboard Shortcuts';
                     dom.append(h3);
                 }
+                const hint = document.createElement('small'); {
+                    hint.textContent = 'Shortcuts are evaluated from top to bottom. Evaluation stops after the first shortcut triggers (in case of QRs only if the QR sets stop to true).';
+                    dom.append(hint);
+                }
                 const list = document.createElement('div'); {
                     list.classList.add('stkc--list');
                     $(list).sortable({
