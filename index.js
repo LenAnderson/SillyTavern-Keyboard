@@ -1,9 +1,9 @@
 import { is_send_press, saveSettingsDebounced, sendTextareaMessage } from '../../../../script.js';
 import { extension_settings } from '../../../extensions.js';
-import { LoadLocalBool, SaveLocal } from '../../../f-localStorage.js';
 import { Popup, POPUP_TYPE } from '../../../popup.js';
 import { SlashCommand } from '../../../slash-commands/SlashCommand.js';
 import { SlashCommandParser } from '../../../slash-commands/SlashCommandParser.js';
+import { accountStorage } from '../../../util/AccountStorage.js';
 import { getSortableDelay } from '../../../utils.js';
 import { Callback } from './src/Callback.js';
 import { KeyCombo } from './src/KeyCombo.js';
@@ -102,7 +102,7 @@ const init = async()=>{
         check: ()=>!document.querySelector('#curEditTextarea') && !is_send_press,
         callback: async(evt)=>{
             const skipConfirmKey = 'RegenerateWithCtrlEnter';
-            const skipConfirm = LoadLocalBool(skipConfirmKey);
+            const skipConfirm = accountStorage.getItem(skipConfirmKey) === 'true';
             function doRegenerate() {
                 console.debug('Regenerating with Ctrl+Enter');
                 $('#option_regenerate').trigger('click');
@@ -114,12 +114,15 @@ const init = async()=>{
                 let regenerateWithCtrlEnter = false;
                 const result = await Popup.show.confirm('Regenerate Message', 'Are you sure you want to regenerate the latest message?', {
                     customInputs: [{ id: 'regenerateWithCtrlEnter', label: 'Don\'t ask again' }],
-                    onClose: (popup) => regenerateWithCtrlEnter = popup.inputResults.get('regenerateWithCtrlEnter') ?? false,
+                    onClose: (popup) => {
+                        regenerateWithCtrlEnter = popup.inputResults.get('regenerateWithCtrlEnter') ?? false;
+                    },
                 });
                 if (!result) {
                     return;
                 }
-                SaveLocal(skipConfirmKey, regenerateWithCtrlEnter);
+
+                accountStorage.setItem(skipConfirmKey, String(regenerateWithCtrlEnter));
                 doRegenerate();
             }
         },
